@@ -9,8 +9,8 @@ attr_accessor :wallet
   @fav_song = fav_song
  end
 
-  # def decrease_wallet(entry_fee)
-  #   @wallet -= entry_fee
-  #   # binding.pry
-  # end
+ def decrease_wallet(room)
+  @wallet -= room.entry_fee
+ end
+
 end

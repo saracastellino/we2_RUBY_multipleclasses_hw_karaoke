@@ -2,7 +2,7 @@ require("minitest/autorun")
 require("minitest/reporters")
 MiniTest::Reporters.use!
 Minitest::Reporters::SpecReporter.new
-
+require('pry')
 require_relative("../room.rb")
 require_relative("../song.rb")
 require_relative("../guest.rb")
@@ -18,6 +18,12 @@ class RoomTest < MiniTest::Test
     @song6 = Song.new("Rainbow", "Classic rock")
     @punk_room = Room.new("Punk Room", 8, [@song1, @song2, @song3], 500.00, 5.50, [@guest1])
     @rnr_room = Room.new("Rnr Room", 6, [@song4, @song5, @song6], 500.00, 5.50, [@guest4, @guest5, @guest6])
+
+    @guest2 = Guest.new("Louise", 80.00, @song5)
+    @guest3 = Guest.new("Mary", 60.00, @song2)
+    @guest5 = Guest.new("Nick", 65.00, @song5)
+    @guest7 = Guest.new("Nick", 65.00, @song5)
+    @guest8 = Guest.new("Joseph", 40.00, @song2)
   end
 
  # def initialize(name, available_places, playlist, till, entry_fee, number_of_guests)
@@ -29,12 +35,8 @@ class RoomTest < MiniTest::Test
     assert_equal(1, @punk_room.guests.size)
   end
 #
-  def test_decrease_available_places
+  def test_change_available_places
     assert_equal(7, @punk_room.change_available_places)
-  end
-#
-  def test_increase_available_places
-    assert_equal(3, @rnr_room.change_available_places)
   end
 #
   def test_increase_till
@@ -64,29 +66,36 @@ class RoomTest < MiniTest::Test
     assert_equal(expected_songs, result)
   end
 #
-  def test_deny_access_if_room_full
-    @rnr_room.check_in_guest(@guest1, @guest2, @guest3, @guest7, @guest8)
-    @rnr_room.change_available_places
-    @rnr_room.increase_till(@entry_fee)
-    # @guest1.decrease_wallet(@entry_fee)
-    # @guest2.decrease_wallet(@entry_fee)
-    # @guest3.decrease_wallet(@entry_fee)
-    # @guest7.decrease_wallet(@entry_fee)
-    # @guest8.decrease_wallet(@entry_fee)
-    assert_equal(8, @rnr_room.guests.length)
-    assert_equal(505.50, @rnr_room.till)
-    assert_equal(-2, @rnr_room.available_places)
-    # assert_equal(nil, @guest1.wallet)
-    # assert_equal(74.50, @guest2.wallet)
-    # assert_equal(54.50, @guest3.wallet)
-    # assert_equal(59.50, @guest7.wallet)
-    # assert_equal(34.50, @guest8.wallet)
 
+  def test_deny_access
+    @guest1 = Guest.new("John", 5.00, @song2)
+    @guest2 = Guest.new("Louise", 80.00, @song5)
+    @guest3 = Guest.new("Mary", 60.00, @song2)
+    @guest7 = Guest.new("Nick", 65.00, @song5)
+    @guest8 = Guest.new("Joseph", 40.00, @song2)
+    @rnr_room = Room.new("Rnr Room", 6, [@song4, @song5, @song6], 500.00, 5.50, [@guest4, @guest5, @guest6])
+    result = @rnr_room.deny_access(@guest1)
+    @rnr_room.change_available_places
+    @guest1.decrease_wallet(@rnr_room)
+    @rnr_room.increase_till(@rnr_room)
+  #   @guest2.decrease_wallet(@entry_fee)
+  #   @guest3.decrease_wallet(@entry_fee)
+  #   @guest7.decrease_wallet(@entry_fee)
+  #   @guest8.decrease_wallet(@entry_fee)
+    assert_nil(nil, result)
+    assert_equal(3, @rnr_room.available_places)
+    assert_nil(nil, @guest1.wallet)
+    assert_equal(500.00, @rnr_room.till)
+  #   assert_equal(74.50, @guest2.wallet)
+  #   assert_equal(54.50, @guest3.wallet)
+  #   assert_equal(59.50, @guest7.wallet)
+  #   assert_equal(34.50, @guest8.wallet)
+  #
   end
 #
   def test_fav_song_on_air
-    @rnr_room.fav_song_on_air(@guest5)
-    assert_equal("Yay!!! Give me the mic NOW!!!", @rnr_room.playlist.song)
+   result = @rnr_room.fav_song_on_air(@guest5)
+   assert_equal("Yay!!! Give me the mic NOW!!!", result)
   end
 
 end
