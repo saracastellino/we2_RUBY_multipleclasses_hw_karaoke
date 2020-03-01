@@ -18,8 +18,8 @@ class SongTest < MiniTest::Test
     @song6 = Song.new("Rainbow", "Classic rock")
   end
 
-  def get_song_genre
-    assert_equal("Punk", @song3.name)
+  def test_song_genre
+    assert_equal("Punk", @song3.genre)
   end
 
 end
