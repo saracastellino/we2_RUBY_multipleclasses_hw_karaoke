@@ -1,10 +1,10 @@
 class Room
 
-attr_reader :name, :available_places, :playlist, :till, :entry_fee, :guests
+attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
 
- def initialize(name, available_places, playlist, till, entry_fee, guests)
+ def initialize(name, capacity, playlist, till, entry_fee, guests)
    @name = name
-   @available_places = available_places
+   @capacity = capacity
    @playlist = playlist
    @till = till
    @entry_fee = entry_fee
@@ -12,7 +12,7 @@ attr_reader :name, :available_places, :playlist, :till, :entry_fee, :guests
  end
 
   def change_available_places
-    @available_places -= @guests.size
+    available_places = @capacity -= @guests.size
   end
 
   def increase_till(entry_fee)
@@ -21,8 +21,6 @@ attr_reader :name, :available_places, :playlist, :till, :entry_fee, :guests
 
   def check_in_guest(*guest)
     @guests.push(*guest)
-    # @room.change_available_places
-    # @room.increase_till(entry_fee)
   end
 
   def check_out_guest(guest)
@@ -34,8 +32,15 @@ attr_reader :name, :available_places, :playlist, :till, :entry_fee, :guests
     return new_playlist.map {|song| song.name}
 	end
 
- def deny_access(*guest)
-   check_in_guest(*guest) if @available_places > 0 && guests.wallet >= 5.50
+ def allow_access(*guest)
+   if @available_places > 0
+     # && @guest.wallet >= 5.50
+     check_in_guest(*guest)
+     change_available_places()
+     increase_till(entry_fee)
+     # decrease_wallet(guest, room)
+   end
+
  end
 
  def fav_song_on_air(guest)
