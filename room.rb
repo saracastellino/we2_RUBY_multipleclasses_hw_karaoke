@@ -19,6 +19,10 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
   	@till += @entry_fee
   end
 
+  # def can_afford_entry(entry_fee)
+  #   return guest.wallet >= @entry_fee
+  # end
+
   def check_in_guest(*guest)
     @guests.push(*guest)
   end
@@ -32,15 +36,16 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
     return new_playlist.map {|song| song.name}
 	end
 
- def allow_access(*guest)
-   if @available_places > 0
-     # && @guest.wallet >= 5.50
-     check_in_guest(*guest)
-     change_available_places()
-     increase_till(entry_fee)
-     # decrease_wallet(guest, room)
+ def allow_access_available_seats(guest)
+   if capacity > 0
+     check_in_guest(guest)
    end
+ end
 
+ def allow_access_guest_can_afford_fee(guest)
+   if guest.wallet >= @entry_fee
+     check_in_guest(guest)
+   end
  end
 
  def fav_song_on_air(guest)
