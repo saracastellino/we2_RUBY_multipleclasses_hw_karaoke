@@ -16,7 +16,7 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
   end
 
   def increase_till(entry_fee)
-  	@till += @entry_fee
+    @till += @entry_fee
   end
 
   def check_in_guest(*guest)
@@ -27,10 +27,10 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
     @guests.delete(guest)
   end
 
-	def add_song_to_playlist(song)
-		new_playlist = @playlist << song
+  def add_song_to_playlist(song)
+    new_playlist = @playlist << song
     return new_playlist.map {|song| song.name}
-	end
+  end
 
  def deny_access_available_seats(guest)
    if capacity > 0
