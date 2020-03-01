@@ -32,13 +32,13 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
     return new_playlist.map {|song| song.name}
 	end
 
- def deny_access_available_seats(guest)
+ def deny_access_no_available_seats(guest)
    if capacity > 0
      check_in_guest(guest)
    end
  end
 
- def deny_access_guest_can_afford_fee(guest, entry_fee)
+ def deny_access_guest_can_t_afford_fee(guest, entry_fee)
    if guest.wallet >= @entry_fee
      check_in_guest(guest)
    end

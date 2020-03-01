@@ -66,17 +66,17 @@ class RoomTest < MiniTest::Test
     assert_equal(expected_songs, result)
   end
 
-  def test_deny_access_available_seats
+  def test_deny_access_no_available_seats
     @guest8 = Guest.new("Joseph", 40.00, @song2)
     @rnr_room = Room.new("Rnr Room", 6, [@song4, @song5, @song6], 500.00, 5.50, [@guest2, @guest3, @guest4, @guest5, @guest6, @guest7])
-    result = @rnr_room.deny_access_available_seats(@guest8)
+    result = @rnr_room.deny_access_no_available_seats(@guest8)
     assert_nil(nil,result)
   end
 
-  def test_deny_access_guest_can_afford_fee
+  def test_deny_access_guest_can_t_afford_fee
     @guest1 = Guest.new("John", 5.00, @song2)
     @punk_room = Room.new("Punk Room", 7, [@song1, @song2, @song3], 500.00, 5.50, [@guest4])
-    result = @rnr_room.deny_access_guest_can_afford_fee(@guest1, @entry_fee)
+    result = @rnr_room.deny_access_guest_can_t_afford_fee(@guest1, @entry_fee)
     assert_nil(nil, result)
   end
 
