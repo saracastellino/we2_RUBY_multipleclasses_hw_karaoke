@@ -1,6 +1,6 @@
 class Room
 
-attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
+attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests, :available_places
 
  def initialize(name, capacity, playlist, till, entry_fee, guests)
    @name = name
@@ -9,22 +9,25 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
    @till = till
    @entry_fee = entry_fee
    @guests = guests
+   @available_places = capacity
  end
 
   def change_available_places
-    available_places = @capacity -= @guests.size
+    @available_places = @capacity - @guests.size
   end
 
   def increase_till(entry_fee)
   	@till += @entry_fee
   end
 
-  def check_in_guest(*guest)
-    @guests.push(*guest)
+  def check_in_guest(guests)
+    @guests.concat(guests)
+    change_available_places()
   end
 
   def check_out_guest(guest)
     @guests.delete(guest)
+    change_available_places()
   end
 
 	def add_song_to_playlist(song)
@@ -33,7 +36,7 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests
 	end
 
  def deny_access_no_available_seats(guest)
-   if capacity > 0
+   if @available_places > 0
      check_in_guest(guest)
    end
  end

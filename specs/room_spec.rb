@@ -45,19 +45,18 @@ class RoomTest < MiniTest::Test
   end
 
   def test_check_in_guest
-    result = @punk_room.check_in_guest(@guest2)
+    @punk_room.check_in_guest([@guest2, @guest3])
     @punk_room.increase_till(@entry_fee)
     @punk_room.change_available_places
     assert_equal(505.50, @punk_room.till)
-    assert_equal(2, result.length)
-    assert_equal(5, @punk_room.capacity)
+    assert_equal(3, @punk_room.guests.length)
+    assert_equal(4, @punk_room.available_places)
   end
 
   def test_check_out_guest
-    result = @punk_room.check_out_guest(@guest1)
-    result = @punk_room.change_available_places
-    assert_nil(nil, result)
-    assert_equal(7, result)
+    @punk_room.check_out_guest(@guest1)
+    assert_equal(0, @punk_room.guests.length)
+    assert_equal(7, @punk_room.available_places)
   end
 
   def test_add_song_to_playlist
@@ -68,9 +67,15 @@ class RoomTest < MiniTest::Test
 
   def test_deny_access_no_available_seats
     @guest8 = Guest.new("Joseph", 40.00, @song2)
-    @rnr_room = Room.new("Rnr Room", 6, [@song4, @song5, @song6], 500.00, 5.50, [@guest2, @guest3, @guest4, @guest5, @guest6, @guest7])
-    result = @rnr_room.deny_access_no_available_seats(@guest8)
-    assert_nil(nil,result)
+    rnr_room1 = Room.new("Rnr Room", 6, [@song4, @song5, @song6], 500.00, 5.50, [])
+    rnr_room1.check_in_guest([@guest2, @guest3, @guest4, @guest5, @guest6, @guest7])
+    # binding.pry
+    # @punk_room.increase_till(@entry_fee)
+    # @punk_room.change_available_places
+    rnr_room1.deny_access_no_available_seats(@guest8)
+    # assert_equal(500.00, @punk_room.till)
+    assert_equal(0, rnr_room1.available_places)
+    assert_equal(6, rnr_room1.capacity)
   end
 
   def test_deny_access_guest_can_t_afford_fee
