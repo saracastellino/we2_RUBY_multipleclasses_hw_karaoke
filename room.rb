@@ -30,10 +30,10 @@ attr_reader :name, :capacity, :playlist, :till, :entry_fee, :guests, :available_
     change_available_places()
   end
 
-	def add_song_to_playlist(song)
-		new_playlist = @playlist << song
+  def add_song_to_playlist(song)
+    new_playlist = @playlist << song
     return new_playlist.map {|song| song.name}
-	end
+  end
 
  def deny_access_no_available_seats(guest)
    if @available_places > 0
